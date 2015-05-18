@@ -1,0 +1,22 @@
+From 159f3bfafced8b546010caeaafabecf735598e34 Mon Sep 17 00:00:00 2001
+From: Tim Graham <timograham@gmail.com>
+Date: Wed, 18 Mar 2015 08:52:17 -0400
+Subject: [PATCH 1/2] [1.7.x] Bumped version for 1.7.7 release.
+
+---
+ django/__init__.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/django/__init__.py b/django/__init__.py
+index c343cd1..e398988 100644
+--- a/django/__init__.py
++++ b/django/__init__.py
+@@ -1,4 +1,4 @@
+-VERSION = (1, 7, 7, 'alpha', 0)
++VERSION = (1, 7, 7, 'final', 0)
+ 
+ 
+ def get_version(*args, **kwargs):
+-- 
+2.1.0
+

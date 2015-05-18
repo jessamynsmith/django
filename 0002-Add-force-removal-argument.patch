@@ -1,0 +1,36 @@
+From d98fff8219469a363493e8d8455c7ffb2430d36f Mon Sep 17 00:00:00 2001
+From: protosac <protosacq@gmail.com>
+Date: Mon, 18 May 2015 14:40:09 -0700
+Subject: [PATCH 2/2] Add force removal argument.
+
+---
+ django/contrib/contenttypes/management.py | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/django/contrib/contenttypes/management.py b/django/contrib/contenttypes/management.py
+index f705330..d631146 100644
+--- a/django/contrib/contenttypes/management.py
++++ b/django/contrib/contenttypes/management.py
+@@ -6,7 +6,7 @@ from django.utils import six
+ from django.utils.six.moves import input
+ 
+ 
+-def update_contenttypes(app_config, verbosity=2, interactive=True, using=DEFAULT_DB_ALIAS, **kwargs):
++def update_contenttypes(app_config, verbosity=2, interactive=True, using=DEFAULT_DB_ALIAS, force_remove=False, **kwargs):
+     """
+     Creates content types for models in the given app, removing any model
+     entries that no longer have a matching model class.
+@@ -60,7 +60,9 @@ def update_contenttypes(app_config, verbosity=2, interactive=True, using=DEFAULT
+ 
+     # Confirm that the content type is stale before deletion.
+     if to_remove:
+-        if interactive:
++        if force_remove:
++            ok_to_delete = 'yes'
++        elif interactive:
+             content_type_display = '\n'.join(
+                 '    %s | %s' % (ct.app_label, ct.model)
+                 for ct in to_remove
+-- 
+2.1.0
+
