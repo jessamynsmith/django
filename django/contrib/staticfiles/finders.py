@@ -236,6 +236,33 @@ class DefaultStorageFinder(BaseStorageFinder):
                                        "a valid location." % self.__class__)
 
 
+def add_ignores(ignore_patterns):
+    ignore = settings.STATICFILES_IGNORE
+
+    if ignore:
+        if ignore_patterns:
+            ignore_patterns.extend(ignore)
+        else:
+            ignore_patterns = ignore
+
+    return ignore_patterns
+
+
+class FileSystemFinderIgnore(FileSystemFinder):
+    def list(self, ignore_patterns):
+        return super(FileSystemFinderIgnore, self).list(add_ignores(ignore_patterns))
+
+
+class AppDirectoriesFinderIgnore(AppDirectoriesFinder):
+    def list(self, ignore_patterns):
+        return super(AppDirectoriesFinderIgnore, self).list(add_ignores(ignore_patterns))
+
+
+class DefaultStorageFinderIgnore(DefaultStorageFinder):
+    def list(self, ignore_patterns):
+        return super(DefaultStorageFinderIgnore, self).list(add_ignores(ignore_patterns))
+
+
 def find(path, all=False):
     """
     Find a static file with the given path using all enabled finders.
