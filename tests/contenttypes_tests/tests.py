@@ -440,6 +440,34 @@ class UpdateContentTypesTests(TestCase):
         self.assertEqual(ContentType.objects.count(), self.before_count + 1)
 
 
+class RemoveContentTypesTests(TestCase):
+    def setUp(self):
+        self.before_count = ContentType.objects.count()
+        ContentType.objects.create(app_label='contenttypes_tests', model='Fake')
+        self.app_config = apps.get_app_config('contenttypes_tests')
+
+    def test_force_remove_true(self):
+        """
+        force_remove argument of update_contenttypes() should delete stale 
+        contenttypes without keyboard input.
+        """
+        with captured_stdout() as stdout:
+            management.update_contenttypes(self.app_config, force_remove=True)
+        self.assertIn("Deleting stale content type", stdout.getvalue())
+        self.assertEqual(ContentType.objects.count(), self.before_count)
+
+    def test_force_remove_false(self):
+        """
+        force_remove argument of update_contenttypes() should default to
+        required keyboard input to remove stale content types.
+        """
+        management.input = lambda x: force_str("yes")
+        with captured_stdout() as stdout:
+            management.update_contenttypes(self.app_config)
+        self.assertIn("Deleting stale content type", stdout.getvalue())
+        self.assertEqual(ContentType.objects.count(), self.before_count)
+
+
 class TestRouter(object):
     def db_for_read(self, model, **hints):
         return 'other'
